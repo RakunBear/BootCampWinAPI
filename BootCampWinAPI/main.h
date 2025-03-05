@@ -1,18 +1,52 @@
 #pragma once
 #include <Windows.h>
 #include <iostream>
+#include <vector>
 
+
+enum class SelectState
+{
+	None,
+	Drag,
+};
+enum class ContactDir : uint8_t
+{
+	None   = 0b00000000,
+	Left   = 0b00000001,
+	Top	   = 0b00000010,
+	Right  = 0b00000100,
+	Bottom = 0b00001000,
+};
 enum class CollidState
 {
-	Enter,
+	None,
 	Stay,
-	Exit
 };
 
 enum class ShapeType : uint8_t
 {
 	Square,
 	Star
+};
+
+enum class ObjectType : uint8_t
+{
+	Car,
+	StartBox,
+	Destroyer,
+	BigSquare,
+	SmallSquare,
+};
+
+class Object;
+
+class GameManager
+{
+public:
+	std::vector<Object*> objects;
+	void SetHDC(HDC hdc);
+	void UpdateCollid();
+	void Render();
 };
 
 class Mouse
@@ -25,88 +59,99 @@ public:
 	void Set(int x, int y);
 };
 
-class GameManager
+class Collid
 {
-
+protected:
+	RECT _collider;
+	CollidState _collidState;
+public:
+	Object& object;
+public:
+	Collid(Object& obj) : _collider(RECT{0,0,0,0}), 
+		_collidState(CollidState::None), object{obj} {};
+	uint8_t IsColliding(const RECT& otherCollid);
+	virtual void OnTriggerEnter(Collid& otherCollid);
+	virtual void OnTriggerStay(Collid& otherCollid);
+	virtual void OnTriggerExit(Collid& otherCollid);
+	CollidState CheckCollidState(Collid& otherCollid);
+	bool PointInRect(POINT ptMouse);
+	void SetRect(int x, int y, int width, int height);
+	const RECT& GetRect();
 };
 
 class Object
 {
-private:
+protected:
 	POINT _pos;
 	int _width, _height;
 	bool _isDestroyed;
-	RECT _collider;
-	CollidState _collidState;
+	Collid* _collid;
+	SelectState _selectState;
 	HDC _hdc;
 public:
+	ObjectType type;
+	bool isDrag;
+	Object* _parent;
+	std::vector<Object*> _childs;
+
+public:
 	Object();
+	~Object();
+	virtual void Initialize();
 	void SetHDC(HDC hdc);
-	bool PointInRect(POINT ptMouse);
-	bool IsColliding(RECT rc2);
-	void Render();
-	void Update(Object obj);
-	CollidState GetCollidState();
+	void SetPos(int x, int y);
+	void SetSize(int width, int height);
+	void Move(POINT movePoint);
+	void Move(int x, int y);
+	void RenderRect();
+	virtual void Render();
+	virtual void Update(Object obj);
+	Collid* GetCollider();
+	void Destroy();
 };
 
-class Car
+class Car : public Object
 {
-private:
-	int _width, _height;
 public:
-	int posX, posY;
-	bool isDrag;
-	RECT collider;
 	Car();
 	void RenderRect(HDC hdc, int x, int y, int width, int height);
 	void RenderRectAtCenter(HDC hdc, int x, int y, int width, int height);
 	void RenderEllipse(HDC hdc, int x, int y, int width, int height);
 	void RenderEllipseAtCenter(HDC hdc, int x, int y, int width, int height);
-	void RenderCar(HDC hdc, int posX, int posY);
-	bool PointInRect(POINT ptMouse, RECT rc);
+	void Render() override;
 };
 
-class StarBox
+class StarBox : public Object
 {
 private:
-	int _x, _y;
-	int _width, _height;
 	int _spaceHeight;
 	bool _isStar;
-	bool _isDestroyed;
-	RECT _collider;
 public:
-	bool isDrag;
-	ShapeType type;
+	ShapeType shapeType;
 public:
 	StarBox();
-	void SetPos(int x, int y);
-	void Move(int x, int y);
-	bool CanBeStar(int y);
-	bool PointInRect(POINT ptMouse);
-	void Render(HDC hdc);
-	void RenderRect(HDC hdc);
-	void RenderStar(HDC hdc);
-	int GetWidth();
-	void SetSize(int width);
-	void Destroy();
-	RECT GetCollider();
+	bool CanBeStar();
+	void Render() override;
+	void RenderStar();
 };
-class Destroyer
+
+class Destroyer : public Object
 {
-private:
-	int _width;
-	POINT _point;
-	RECT _collider;
-public:
-	bool isDrag;
 public:
 	Destroyer();
-	void SetSize(int width);
-	void SetPos(int x, int y);
-	void Move(int x, int y);
-	bool PointInRect(POINT ptMouse);
-	bool RectInRect(RECT rc2);
-	void Render(HDC hdc);
-	RECT GetCollider();
+	void Render() override;
+};
+
+class BigSquare : public Object
+{
+public:
+	BigSquare();
+	void Render() override;
+};
+
+class SmallSquare : public Object
+{
+public:
+	SmallSquare();
+	void Render() override;
 };

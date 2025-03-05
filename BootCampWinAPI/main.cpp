@@ -30,10 +30,13 @@ Mouse mouse;
 Car car;
 StarBox starBoxs[10];
 Destroyer destroyer;
+BigSquare bigSquare[2];
+SmallSquare smallSquare;
+GameManager gameManager;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
-int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpszCmdParam, _In_ int nCmdShow)
+int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpszCmdParam, _In_ int nCmdShow)
 {
 	g_hinstance = hInstance;
 
@@ -60,13 +63,28 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	}
 	else
 	{
+		gameManager.objects.push_back(&car);
 		/* Set Box */
 		for (int i = 0; i < (sizeof(starBoxs) / sizeof(starBoxs[0])); ++i)
 		{
-			starBoxs[i].SetSize(50);
-			starBoxs[i].SetPos(100 + (i * starBoxs[i].GetWidth()), 600);
+			gameManager.objects.push_back(&starBoxs[i]);
+			starBoxs[i].SetSize(50,50);
+			starBoxs[i].SetPos(100 + (i * 50), 600);
 		}
-		destroyer.SetSize(100);
+		gameManager.objects.push_back(&destroyer);
+		destroyer.SetPos(500, 100);
+		destroyer.SetSize(100,100);
+
+		for (int i = 0; i < 2; ++i)
+		{
+			gameManager.objects.push_back(&bigSquare[i]);
+			bigSquare->SetPos(200 + 150 * i, 200);
+			bigSquare->SetSize(150, 150);
+		}
+		gameManager.objects.push_back(&smallSquare);
+		smallSquare.SetPos(250, 200);
+		smallSquare.SetSize(50, 50);
+		bigSquare[0]._childs.push_back(&smallSquare);
 		OutputDebugString(L"Test\n");
 	}
 
@@ -82,8 +100,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
 LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
-	PAINTSTRUCT ps;
 	HDC hdc;
+	PAINTSTRUCT ps;
 	// static 변수 : 함수 내에서 선언
 	// 데이터 영역에 메모리가 할당 (전역변수와 같음)
 	// 프로그램 종료 시에 메모리 해제
@@ -102,12 +120,12 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		{
 		case 'a': case 'A':
 			hdc = BeginPaint(g_hWnd, &ps);
-			car.posX -= 10;
+			car.Move(-10, 0);
 			InvalidateRect(g_hWnd, NULL, true);
 			break;
 		case 'd': case 'D':
 			hdc = BeginPaint(g_hWnd, &ps);
-			car.posX += 10;
+			car.Move(10, 0);
 			InvalidateRect(g_hWnd, NULL, true);
 			break;
 		default:
@@ -121,21 +139,21 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			--dan;
 
 		/* Mouse Mode Car */
-		if (car.PointInRect(mouse.point, car.collider))
+		if (car.GetCollider()->PointInRect(mouse.point))
 		{
 			car.isDrag = true;
 			break;
 		}
 		for (int i = 0; i < (sizeof(starBoxs) / sizeof(starBoxs[0])); ++i)
 		{
-			if (starBoxs[i].PointInRect(mouse.point))
+			if (starBoxs[i].GetCollider()->PointInRect(mouse.point))
 			{
 				starBoxs[i].isDrag = true;
 				selectedIdx = i;
 				break;
 			}
 		}
-		if (destroyer.PointInRect(mouse.point))
+		if (destroyer.GetCollider()->PointInRect(mouse.point))
 		{
 			destroyer.isDrag = true;
 			break;
@@ -145,14 +163,16 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_LBUTTONUP:
 		car.isDrag = false;
-		
 		starBoxs[selectedIdx].isDrag = false;
-		if (destroyer.RectInRect(starBoxs[selectedIdx].GetCollider()))
+		destroyer.isDrag = false;
+
+		if (starBoxs[selectedIdx].GetCollider()->
+			CheckCollidState(*(destroyer.GetCollider()))
+			== CollidState::Stay)
 		{
 			starBoxs[selectedIdx].Destroy();
 		}
-
-		destroyer.isDrag = false;
+		InvalidateRect(g_hWnd, NULL, true);
 		break;
 	case WM_RBUTTONDOWN:
 		/* GUGUDan */
@@ -169,18 +189,18 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 		if (car.isDrag)
 		{
-			car.posX += mouse.movedPoint.x; car.posY += mouse.movedPoint.y;
+			car.Move(mouse.movedPoint);
 		}
 
 		for (int i = 0; i < (sizeof(starBoxs) / sizeof(starBoxs[0])); ++i)
 		{
 			if (starBoxs[i].isDrag)
-				starBoxs[i].Move(mouse.movedPoint.x, mouse.movedPoint.y);
+				starBoxs[i].Move(mouse.movedPoint);
 		}
 
 		if (destroyer.isDrag)
 		{
-			destroyer.Move(mouse.movedPoint.x, mouse.movedPoint.y);
+			destroyer.Move(mouse.movedPoint);
 		}
 
 		InvalidateRect(g_hWnd, NULL, true);
@@ -204,18 +224,23 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		//Ellipse(hdc, 300, 300, 500, 500);
 		//Rectangle(hdc, 500, 300, 700, 400);
 
-		car.RenderCar(hdc, car.posX, car.posY);
+		gameManager.SetHDC(hdc);
+		gameManager.UpdateCollid();
+
+
 		wsprintf(szText, L"Car State : %s", car.isDrag ? L"Drag" : L"No Drag");
 		TextOut(hdc, 20, 20, szText, wcslen(szText));
 		wsprintf(szText, L"MousePos : %d %d", mouse.curX, mouse.point.y);
 		TextOut(hdc, 20, 40, szText, wcslen(szText));
+		//car.Render();
 
-		for (int i = 0; i < (sizeof(starBoxs) / sizeof(starBoxs[0])); ++i)
-		{
-			starBoxs[i].Render(hdc);
-		}
+		//for (int i = 0; i < (sizeof(starBoxs) / sizeof(starBoxs[0])); ++i)
+		//{
+		//	starBoxs[i].Render();
+		//}
 
-		destroyer.Render(hdc);
+		//destroyer.Render();
+		gameManager.Render();
 
 		EndPaint(g_hWnd, &ps);
 		break;
@@ -229,9 +254,30 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hWnd, iMessage, wParam, lParam);
 }
 
-Car::Car() : posX(250), posY(250), isDrag(false), _width(140), _height(60)
+#pragma region 정의부
+Mouse::Mouse() :preX(0), preY(0), curX(0), curY(0)
 {
-	this->collider = RECT{ this->posX, this->posY, this->posX + _width, this->posY + _height };
+	point = POINT{ curX, curY };
+	movedPoint = POINT{ 0,0 };
+}
+
+void Mouse::Set(int x, int y)
+{
+	preX = curX; preY = curY;
+	curX = x; curY = y;
+	point.x = curX;
+	point.y = curY;
+	movedPoint.x = curX - preX;
+	movedPoint.y = curY - preY;
+}
+
+Car::Car()
+{
+	Initialize();
+	_pos = POINT{ 300, 300 };
+	_width = { 140 };
+	_height = { 50 };
+	_collid->SetRect(_pos.x, _pos.y, _width, _height);
 }
 
 void Car::RenderRect(HDC hdc, int x, int y, int width, int height)
@@ -254,168 +300,174 @@ void Car::RenderEllipseAtCenter(HDC hdc, int x, int y, int width, int height)
 	Ellipse(hdc, x - (x + width) / 2, y - (y + height) / 2, x + (x + width) / 2, y + (y + height) / 2);
 }
 
-void Car::RenderCar(HDC hdc, int posX, int posY)
+void Car::Render()
 {
+	if (_isDestroyed) return;
+
+	const RECT& rt = _collid->GetRect();
 	// 펜(테두리)과 브러시(채우기 색상) 생성
 	HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0)); 
 	// 생성한 펜과 브러시를 선택
-	HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
+	HPEN hOldPen = (HPEN)SelectObject(_hdc, hPen);
 	// 그리기
-	collider.left = posX; collider.right = posX + _width; collider.top = posY; collider.bottom = posY + _height;
-	RenderRect(hdc, collider.left, collider.top, collider.right - collider.left, collider.bottom - collider.top); // collider
+	RenderRect(_hdc, rt.left, rt.top, rt.right - rt.left, rt.bottom - rt.top); // collider
 	// 이전 펜과 브러시로 복구
-	SelectObject(hdc, hOldPen);
+	SelectObject(_hdc, hOldPen);
 	// 생성한 펜과 브러시 삭제
 	DeleteObject(hPen);
 
-	RenderRect(hdc, posX + 20, posY, 100, 20); // 뚜껑
-	RenderRect(hdc, posX, posY + 20, 140, 30); // MainFrame
-	RenderEllipse(hdc, posX + 20, posY + 40, 20, 20); // L Tier
-	RenderEllipse(hdc, posX + 100, posY + 40, 20, 20); // R Tier
+	RenderRect(_hdc, _pos.x + 20, _pos.y, 100, 20); // 뚜껑
+	RenderRect(_hdc, _pos.x, _pos.y + 20, 140, 30); // MainFrame
+	RenderEllipse(_hdc, _pos.x + 20, _pos.y + 40, 20, 20); // L Tier
+	RenderEllipse(_hdc, _pos.x + 100, _pos.y + 40, 20, 20); // R Tier
 
 }
 
-bool Car::PointInRect(POINT ptMouse, RECT rc)
+StarBox::StarBox()
 {
-	if ((ptMouse.x < rc.left) || (ptMouse.x > rc.right) || (ptMouse.y < rc.top) || (ptMouse.y > rc.bottom) )
-		return false;
-
-	return true;
+	Initialize();
+	type = ObjectType::StartBox;
+	_spaceHeight = 200;
+	_isStar = false;
+	shapeType = ShapeType::Square;
 }
 
-Mouse::Mouse() :preX(0), preY(0), curX(0), curY(0)
+bool StarBox::CanBeStar()
 {
-	point = POINT{ curX, curY };
-	movedPoint = POINT{ 0,0 };
-}
-
-void Mouse::Set(int x, int y)
-{
-	preX = curX; preY = curY;
-	curX = x; curY = y;
-	point.x = curX;
-	point.y = curY;
-	movedPoint.x = curX - preX;
-	movedPoint.y = curY - preY;
-}
-
-StarBox::StarBox() : _x(0), _y(0), _width(50), _height(50), _spaceHeight(200), _isStar(false), isDrag(false), _isDestroyed(false)
-{
-	_collider = RECT{ _x, _y, _width, _height };
-	type = ShapeType::Square;
-}
-
-void StarBox::SetPos(int x, int y)
-{
-	_x = x; _y = y;
-	_collider = { _x, _y, _x + _width, _y + _height };
-	_isStar = CanBeStar(_y);
-}
-
-void StarBox::Move(int x, int y)
-{
-	if (_isDestroyed) return;
-
-	SetPos(_x + x, _y + y);
-}
-
-bool StarBox::CanBeStar(int y)
-{
-	if (y <= _spaceHeight)
+	if (_pos.y <= _spaceHeight)
 	{
-		type = ShapeType::Star;
+		shapeType = ShapeType::Star;
 		return true;
 	}
 
-	type = ShapeType::Square;
+	shapeType = ShapeType::Square;
 	return false;
 }
 
-bool StarBox::PointInRect(POINT ptMouse)
-{
-	if ((ptMouse.x < _collider.left) || (ptMouse.x > _collider.right) || (ptMouse.y < _collider.top) || (ptMouse.y > _collider.bottom))
-		return false;
-
-	return true;
-}
-
-void StarBox::Render(HDC hdc)
+void StarBox::Render()
 {
 	if (_isDestroyed) return;
 
-	if (_isStar)
-		RenderStar(hdc);
+	if (CanBeStar())
+		RenderStar();
 	else
-		RenderRect(hdc);
+		RenderRect();
 }
 
-void StarBox::RenderRect(HDC hdc)
-{
-	Rectangle(hdc, _collider.left, _collider.top, _collider.right, _collider.bottom);
-}
 
-void StarBox::RenderStar(HDC hdc)
+
+void StarBox::RenderStar()
 {
 	/* collider */
 	HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
-	HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
-	RenderRect(hdc);
-	SelectObject(hdc, hOldPen);
+	HPEN hOldPen = (HPEN)SelectObject(_hdc, hPen);
+	RenderRect();
+	SelectObject(_hdc, hOldPen);
 	DeleteObject(hPen);
-
-	MoveToEx(hdc, _collider.left, _collider.top, NULL);
-	LineTo(hdc, _collider.right, _collider.bottom);
-	LineTo(hdc, _collider.left, (_collider.bottom + _collider.top) / 2);
-	LineTo(hdc, _collider.right, _collider.top);
-	LineTo(hdc, (_collider.right + _collider.left) / 2, _collider.bottom);
-	LineTo(hdc, _collider.left, _collider.top);
+	
+	const RECT& rt = _collid->GetRect();
+	MoveToEx(_hdc, rt.left, rt.top, NULL);
+	LineTo(_hdc, rt.right, rt.bottom);
+	LineTo(_hdc, rt.left, (rt.bottom + rt.top) / 2);
+	LineTo(_hdc, rt.right, rt.top);
+	LineTo(_hdc, (rt.right + rt.left) / 2, rt.bottom);
+	LineTo(_hdc, rt.left, rt.top);
 }
 
-int StarBox::GetWidth()
+Destroyer::Destroyer()
 {
-	return _width;
+	Initialize();
 }
 
-void StarBox::SetSize(int width)
+void Destroyer::Render()
 {
-	_width = width;
-	_height = width;
+	/* collider */
+	HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
+	HPEN hOldPen = (HPEN)SelectObject(_hdc, hPen);
+	Rectangle(_hdc, _collid->GetRect().left, _collid->GetRect().top, _collid->GetRect().right, _collid->GetRect().bottom);
+	SelectObject(_hdc, hOldPen);
+	DeleteObject(hPen);
 }
 
-void StarBox::Destroy()
+void Object::RenderRect()
+{
+	Rectangle(_hdc, _collid->GetRect().left, _collid->GetRect().top, _collid->GetRect().right, _collid->GetRect().bottom);
+}
+
+void Object::Render()
+{
+	if (_isDestroyed) return;
+}
+
+void Object::Update(Object obj)
+{
+	if (_isDestroyed) return;
+}
+
+Collid* Object::GetCollider()
+{
+	return _collid;
+}
+
+void Object::Destroy()
 {
 	_isDestroyed = true;
 }
 
-RECT StarBox::GetCollider()
+Object::Object()
 {
-	return _collider;
+	Initialize();
 }
 
-Destroyer::Destroyer() : _width(100)
+Object::~Object()
 {
-	_point = POINT{ 100, 100 };
-	_collider = { _point.x, _point.y, _point.x + _width, _point.y + _width };
+	if (_collid)
+		delete _collid;
+	if (_parent)
+		delete _parent;
 }
 
-void Destroyer::SetSize(int width)
+void Object::Initialize()
 {
-	_width = width;
-	_collider = { _point.x, _point.y, _point.x + _width, _point.y + _width };
+	_pos = POINT{ 0, 0 };
+	_width = 0; _height = 0;
+	_collid = new Collid(*this);
+	_selectState = SelectState::None;
+	_hdc = nullptr;
+	_parent = nullptr;
+	_childs;
+	_isDestroyed = false;
+	isDrag = false;
 }
 
-void Destroyer::SetPos(int x, int y)
+void Object::SetHDC(HDC hdc)
 {
-	_point.x = x; _point.y = y;
-	_collider = { _point.x, _point.y, _point.x + _width, _point.y + _width };
+	_hdc = hdc;
 }
 
-void Destroyer::Move(int x, int y)
+void Object::SetPos(int x, int y)
 {
-	SetPos(_point.x + x, _point.y + y);
+	_pos.x = x; _pos.y = y;
+	_collid->SetRect(x, y, _width, _height);
 }
 
-bool Destroyer::PointInRect(POINT ptMouse)
+void Object::SetSize(int width, int height)
+{
+	_width = width; _height = height;
+	_collid->SetRect(_pos.x, _pos.y, width, height);
+}
+
+void Object::Move(POINT movePoint)
+{
+	SetPos(_pos.x + movePoint.x, _pos.y + movePoint.y);
+}
+
+void Object::Move(int x, int y)
+{
+	SetPos(_pos.x + x, _pos.y + y);
+}
+
+bool Collid::PointInRect(POINT ptMouse)
 {
 	if ((ptMouse.x < _collider.left) || (ptMouse.x > _collider.right) || (ptMouse.y < _collider.top) || (ptMouse.y > _collider.bottom))
 		return false;
@@ -423,28 +475,154 @@ bool Destroyer::PointInRect(POINT ptMouse)
 	return true;
 }
 
-bool Destroyer::RectInRect(RECT rc2)
+void Collid::SetRect(int x, int y, int width, int height)
 {
-	if (_collider.right < rc2.left || _collider.left > rc2.right ||
-		_collider.top > rc2.bottom || _collider.bottom < rc2.top)
-	{
-		return false;
-	}
-
-	return true;
+	_collider.left = x; _collider.top = y;
+	_collider.right = x + width; _collider.bottom = y + height;
 }
 
-void Destroyer::Render(HDC hdc)
-{
-	/* collider */
-	HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
-	HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
-	Rectangle(hdc, _collider.left, _collider.top, _collider.right, _collider.bottom);
-	SelectObject(hdc, hOldPen);
-	DeleteObject(hPen);
-}
-
-RECT Destroyer::GetCollider()
+const RECT& Collid::GetRect()
 {
 	return _collider;
+}
+
+uint8_t Collid::IsColliding(const RECT& otherCollid)
+{
+	uint8_t contactDir = (uint8_t)ContactDir::None;
+	if (otherCollid.left <= _collider.left && _collider.left <= otherCollid.right)
+		contactDir = contactDir | (uint8_t)ContactDir::Left;
+	else
+		contactDir = contactDir ^ (uint8_t)ContactDir::Left;
+	if (otherCollid.left <= _collider.right && _collider.right <= otherCollid.right)
+		contactDir = contactDir | (uint8_t)ContactDir::Right;
+	else
+		contactDir = contactDir ^ (uint8_t)ContactDir::Right;
+	if (otherCollid.top <= _collider.top && _collider.top <= otherCollid.bottom)
+		contactDir = contactDir | (uint8_t)ContactDir::Top;
+	else
+		contactDir = contactDir ^ (uint8_t)ContactDir::Top;
+	if (otherCollid.top <= _collider.bottom && _collider.bottom <= otherCollid.bottom)
+		contactDir = contactDir | (uint8_t)ContactDir::Bottom;
+	else
+		contactDir = contactDir ^ (uint8_t)ContactDir::Bottom;
+
+	return contactDir;
+}
+
+void Collid::OnTriggerEnter(Collid& otherCollid)
+{
+	if (object.type == ObjectType::BigSquare 
+		&& otherCollid.object.type == ObjectType::BigSquare)
+	{
+		otherCollid.object._childs = object._childs;
+		object._childs.clear();
+	}
+}
+
+void Collid::OnTriggerStay(Collid& otherCollid)
+{
+	if (object._parent != nullptr)
+	{
+		const RECT& pCollider = otherCollid.GetRect();
+		_collider.left = _collider.left < pCollider.left ? pCollider.left : _collider.left;
+		_collider.top = _collider.top < pCollider.top ? pCollider.top : _collider.top;
+		_collider.right = _collider.right > pCollider.right ? pCollider.right : _collider.right;
+		_collider.bottom = _collider.bottom > pCollider.bottom ? pCollider.bottom : _collider.bottom;
+	}
+}
+
+void Collid::OnTriggerExit(Collid& otherCollid)
+{
+}
+
+CollidState Collid::CheckCollidState(Collid& otherCollid)
+{
+	uint8_t b = IsColliding(otherCollid.GetRect());
+	if (b == 0)
+	{
+		if ((int)_collidState > 0)
+		{
+			OnTriggerExit(otherCollid);
+		}
+	}
+	else if (b > 0)
+	{
+		if (_collidState == CollidState::None)
+		{
+			OnTriggerEnter(otherCollid);
+			_collidState = CollidState::Stay;
+		}
+		else
+		{
+			OnTriggerStay(otherCollid);
+		}
+	}
+
+	if (object._parent != nullptr)
+	{
+		for (Object* childObj : object._childs)
+		{
+			CheckCollidState(*(childObj->GetCollider()));
+		}
+	}
+
+	return _collidState;
+}
+#pragma endregion
+
+void GameManager::SetHDC(HDC hdc)
+{
+	for (Object* pObj : gameManager.objects)
+	{
+		if (!pObj) continue;
+
+		pObj->SetHDC(hdc);
+	}
+}
+
+void GameManager::UpdateCollid()
+{
+	for (Object* pObj : gameManager.objects)
+	{
+		if (!pObj) continue;
+
+		for (Object* pOtherObj : gameManager.objects)
+		{
+			if (!pOtherObj || pOtherObj == pObj)
+				continue;
+
+			pObj->GetCollider()->CheckCollidState(
+				*(pOtherObj->GetCollider()));
+		}
+	}
+}
+
+void GameManager::Render()
+{
+	for (Object* obj : objects)
+	{
+		obj->Render();
+	}
+}
+
+BigSquare::BigSquare()
+{
+	Initialize();
+	type = ObjectType::BigSquare;
+}
+
+void BigSquare::Render()
+{
+	RenderRect();
+}
+
+SmallSquare::SmallSquare()
+{
+	Initialize();
+	type = ObjectType::SmallSquare;
+}
+
+void SmallSquare::Render()
+{
+	RenderRect();
 }
