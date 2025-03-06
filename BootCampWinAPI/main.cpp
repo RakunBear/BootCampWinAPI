@@ -21,6 +21,7 @@
 		5_4. 큰 상자끼리 부딪히면 작은 상자가 부딪힌 상자로 넘어감 (제어권이 넘어감)
 */
 
+
 #include "main.h"
 
 HINSTANCE g_hinstance;	// 프로그램 인스턴스 핸들
@@ -32,7 +33,6 @@ StarBox starBoxs[10];
 Destroyer destroyer;
 BigSquare bigSquare[2];
 SmallSquare smallSquare;
-GameManager gameManager;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam);
 
@@ -86,6 +86,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		smallSquare.SetSize(50, 50);
 		bigSquare[0]._childs.push_back(&smallSquare);
 		OutputDebugString(L"Test\n");
+		for (int i = 0; i < 2; ++i)
+		{
+			bigSquare[i].SetPos(200 + i * 200, 200);
+		}
+		bigSquare[0].child = &smallSquare;
+		bigSquare[0].other = &bigSquare[1];
+		bigSquare[1].other = &bigSquare[0];
 	}
 
 	MSG message;
@@ -101,7 +108,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	HDC hdc;
-	PAINTSTRUCT ps;
 	// static 변수 : 함수 내에서 선언
 	// 데이터 영역에 메모리가 할당 (전역변수와 같음)
 	// 프로그램 종료 시에 메모리 해제
@@ -111,10 +117,13 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 	/*별박스*/
 	static int selectedIdx = 0;
+	static int selBoxIdx = 0;
 
 	// Logic
 	switch (iMessage)
 	{
+	case WM_CREATE:
+		SetTimer(hWnd, 0, 100, NULL);
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
@@ -158,6 +167,20 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			destroyer.isDrag = true;
 			break;
 		}
+		for (int i = 0; i < 2; ++i)
+		{
+			if (bigSquare[i].PointInRect(mouse.point))
+			{
+				bigSquare[i].isDrag = true;
+				selBoxIdx = i;
+				break;
+			}
+		}
+		if (smallSquare.PointInRect(mouse.point))
+		{
+			smallSquare.isDrag = true;
+			break;
+		}
 
 		InvalidateRect(g_hWnd, NULL, true);
 		break;
@@ -172,7 +195,8 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		{
 			starBoxs[selectedIdx].Destroy();
 		}
-		InvalidateRect(g_hWnd, NULL, true);
+
+		destroyer.isDrag = false;
 		break;
 	case WM_RBUTTONDOWN:
 		/* GUGUDan */
@@ -201,6 +225,17 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		if (destroyer.isDrag)
 		{
 			destroyer.Move(mouse.movedPoint);
+		}
+
+		for (int i = 0; i < 2; ++i)
+		{
+			if (bigSquare[i].isDrag)
+				bigSquare[i].Move(mouse.movedPoint.x, mouse.movedPoint.y);
+		}
+
+		if (smallSquare.isDrag)
+		{
+			smallSquare.Move(mouse.movedPoint.x, mouse.movedPoint.y);
 		}
 
 		InvalidateRect(g_hWnd, NULL, true);
@@ -242,9 +277,21 @@ LRESULT WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		//destroyer.Render();
 		gameManager.Render();
 
+		for (int i = 0; i < 2; ++i)
+		{
+			bigSquare[i].Render(hdc);
+		}
+
+		smallSquare.Render(hdc);
+
 		EndPaint(g_hWnd, &ps);
 		break;
+	case WM_TIMER:
+			bigSquare[selBoxIdx].Move(10, 0);
+		InvalidateRect(hWnd, NULL, true);
+		break;
 	case WM_DESTROY:
+		KillTimer(hWnd, 0);
 		PostQuitMessage(0);
 		break;
 	default:
@@ -586,15 +633,12 @@ void GameManager::UpdateCollid()
 	{
 		if (!pObj) continue;
 
-		for (Object* pOtherObj : gameManager.objects)
-		{
-			if (!pOtherObj || pOtherObj == pObj)
-				continue;
+bool Destroyer::PointInRect(POINT ptMouse)
+{
+	if ((ptMouse.x < _collider.left) || (ptMouse.x > _collider.right) || (ptMouse.y < _collider.top) || (ptMouse.y > _collider.bottom))
+		return false;
 
-			pObj->GetCollider()->CheckCollidState(
-				*(pOtherObj->GetCollider()));
-		}
-	}
+	return true;
 }
 
 void GameManager::Render()
@@ -626,3 +670,131 @@ void SmallSquare::Render()
 {
 	RenderRect();
 }
+
+
+void BigSquare::SetPos(int x, int y)
+{
+	point.x = x; point.y = y;
+	collider = { point.x, point.y, point.x + width, point.y + width };
+}
+
+void BigSquare::Move(int x, int y)
+{
+	SetPos(point.x + x, point.y + y);
+}
+
+bool BigSquare::PointInRect(POINT ptMouse)
+{
+	if ((ptMouse.x < collider.left) || (ptMouse.x > collider.right)
+		|| (ptMouse.y < collider.top) || (ptMouse.y > collider.bottom))
+		return false;
+
+	return true;
+}
+
+bool BigSquare::RectInRect(RECT rc2)
+{
+	if (collider.right < rc2.left || collider.left > rc2.right ||
+		collider.top > rc2.bottom || collider.bottom < rc2.top)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void BigSquare::Render(HDC hdc)
+{
+	/* collider */
+	HBRUSH hBrush = CreateHatchBrush(HS_CROSS, RGB(0, 0, 255));
+	HBRUSH hOldPen = (HBRUSH)SelectObject(hdc, hBrush);
+	Rectangle(hdc, collider.left, collider.top, collider.right, collider.bottom);
+	SelectObject(hdc, hOldPen);
+	DeleteObject(hBrush);
+
+	if (child != nullptr)
+	{
+		UpdateCheckRect();
+		if (RectInRect(other->collider))
+		{
+			Pass();
+
+			RECT& pc = other->collider;
+			int dx = width - std::abs(collider.left - pc.left);
+			int dy = width - std::abs(collider.top - pc.top);
+			dx = collider.left < pc.left ? dx : -dx;
+			dy = collider.top < pc.top ? dy : -dy;
+			other->Move(dx * 1.1f, dy * 1.1f);
+		}
+	}
+
+
+}
+
+void BigSquare::UpdateCheckRect()
+{
+	RECT& pc = child->collider;
+	int x = pc.left;
+	int y = pc.top;
+	if (pc.left < collider.left)
+		x = collider.left;
+	if (pc.top < collider.top)
+		y = collider.top;
+	if (pc.right > collider.right)
+		x = collider.right - child->width;
+	if (pc.bottom > collider.bottom)
+		y = collider.bottom - child->width;
+
+	child->SetPos(x, y);
+}
+
+void BigSquare::Pass()
+{
+	if (child != nullptr && other != nullptr)
+	{
+		other->child = child;
+		this->child = nullptr;
+	}
+}
+
+void SmallSquare::SetPos(int x, int y)
+{
+	point.x = x; point.y = y;
+	collider = { point.x, point.y, point.x + width, point.y + width };
+}
+
+void SmallSquare::Move(int x, int y)
+{
+	SetPos(point.x + x, point.y + y);
+}
+
+bool SmallSquare::PointInRect(POINT ptMouse)
+{
+	if ((ptMouse.x < collider.left) || (ptMouse.x > collider.right)
+		|| (ptMouse.y < collider.top) || (ptMouse.y > collider.bottom))
+		return false;
+
+	return true;
+}
+
+bool SmallSquare::RectInRect(RECT rc2)
+{
+	if (collider.right < rc2.left || collider.left > rc2.right ||
+		collider.top > rc2.bottom || collider.bottom < rc2.top)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void SmallSquare::Render(HDC hdc)
+{
+	/* collider */
+	HPEN hPen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
+	HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
+	Rectangle(hdc, collider.left, collider.top, collider.right, collider.bottom);
+	SelectObject(hdc, hOldPen);
+	DeleteObject(hPen);
+}
+

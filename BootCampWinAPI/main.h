@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include <Windows.h>
 #include <iostream>
 #include <vector>
@@ -152,6 +153,48 @@ public:
 class SmallSquare : public Object
 {
 public:
-	SmallSquare();
-	void Render() override;
+	Destroyer();
+	void SetSize(int width);
+	void SetPos(int x, int y);
+	void Move(int x, int y);
+	bool PointInRect(POINT ptMouse);
+	bool RectInRect(RECT rc2);
+	void Render(HDC hdc);
+	RECT GetCollider();
+};
+
+class SmallSquare
+{
+public:
+	POINT point;
+	int width;
+	RECT collider;
+	bool isDrag;
+
+	SmallSquare() : point(POINT{ 250, 250 }), width(50), collider(RECT{ 250,250,300,300 }), isDrag(false) {};
+	void SetPos(int x, int y);
+	void Move(int x, int y);
+	bool PointInRect(POINT ptMouse);
+	bool RectInRect(RECT rc2);
+	void Render(HDC hdc);
+};
+
+class BigSquare
+{
+public:
+	POINT point;
+	int width;
+	RECT collider;
+	bool isDrag;
+	BigSquare* other;
+	SmallSquare* child;
+
+	BigSquare() : point(POINT{ 200, 200 }), width(150), collider(RECT{ 0,0,0,0 }), isDrag(false) {};
+	void SetPos(int x, int y);
+	void Move(int x, int y);
+	bool PointInRect(POINT ptMouse);
+	bool RectInRect(RECT rc2);
+	void Render(HDC hdc);
+	void UpdateCheckRect();
+	void Pass();
 };
