@@ -127,10 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CommonFunction.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="Missile.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Tank.h" />
     <ClInclude Include="targetver.h" />
@@ -139,6 +141,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="Missile.cpp" />
     <ClCompile Include="Tank.cpp" />
   </ItemGroup>
   <ItemGroup>

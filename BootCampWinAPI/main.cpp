@@ -63,7 +63,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	}
 	else
 	{
-		gameManager.objects.push_back(&car);
 		/* Set Box */
 		for (int i = 0; i < (sizeof(starBoxs) / sizeof(starBoxs[0])); ++i)
 		{
@@ -79,12 +78,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 			gameManager.objects.push_back(&bigSquare[i]);
 			bigSquare->SetPos(200 + 150 * i, 200);
-			bigSquare->SetSize(150, 150);
 		}
 		gameManager.objects.push_back(&smallSquare);
 		smallSquare.SetPos(250, 200);
-		smallSquare.SetSize(50, 50);
-		bigSquare[0]._childs.push_back(&smallSquare);
 		OutputDebugString(L"Test\n");
 		for (int i = 0; i < 2; ++i)
 		{

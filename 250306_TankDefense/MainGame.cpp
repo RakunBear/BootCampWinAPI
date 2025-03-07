@@ -1,19 +1,38 @@
 #include "MainGame.h"
+#include "Tank.h"
+
+/*
+	실습1. 미사일 한발 쏘기
+	실습2. 미사일 여러발 쏘기
+	실습3. 스킬1(360 미사일 쏘기)
+	실습4. 스킬샷2 (자체 기획)
+*/
 
 void MainGame::Init()
 {
+	tank = new Tank();
+	tank->Init();
 }
 
 void MainGame::Release()
 {
+	if (tank)
+	{
+		tank->Release();
+		delete tank;
+	}
 }
 
 void MainGame::Update()
 {
+	if (tank)
+		tank->Update();
 }
 
 void MainGame::Render(HDC hdc)
 {
+	if (tank)
+		tank->Render(hdc);
 }
 
 LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
@@ -24,8 +43,30 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 	switch (iMessage)
 	{
 	case WM_CREATE:
+		SetTimer(hWnd, 0, 100, NULL);
 		break;
 	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case 'a': case 'A':
+			tank->RotateBarrel(DEGTORAD(10));
+			break;
+		case 'd': case 'D':
+			tank->RotateBarrel(-DEGTORAD(10));
+			break;
+		case 'j': case 'J':
+			tank->Fire(0);
+			break;
+		case 'k': case 'K':
+			tank->Fire(1);
+			break;
+		case 'l': case 'L':
+			tank->Fire(2);
+			break;
+		case 'i': case 'I':
+			tank->Fire(3);
+			break;
+		}
 		break;
 	case WM_LBUTTONDOWN:
 		mousePosX = LOWORD(lParam);
@@ -36,19 +77,14 @@ LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lPara
 	case WM_MOUSEMOVE:
 		mousePosX = LOWORD(lParam);
 		mousePosY = HIWORD(lParam);
-
+	case WM_TIMER:
+		this->Update();
+		InvalidateRect(g_hWnd, nullptr, true);
 		break;
 	case WM_PAINT:
 		hdc = BeginPaint(g_hWnd, &ps);
 
-		// 그리기 위한 로직
-		TextOut(hdc, 20, 20, TEXT("Hello, World!"), strlen("Hello, World!"));
-		wsprintf(szText/* 문자열 공간 */,
-			TEXT("Mouse X : %d, Y : %d")/* 형태 */,
-			mousePosX, mousePosY);
-		TextOut(hdc, 20, 60, szText, wcslen(szText));
-
-		RenderBoxs(hdc);
+		this->Render(hdc);
 
 		EndPaint(g_hWnd, &ps);
 		break;

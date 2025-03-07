@@ -3,12 +3,59 @@
   "WorkspaceRootPath": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{55A4A4AE-3769-4074-91B2-9A20D5217894}|BootCampWinAPI\\BootCampWinAPI.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\BootCampWinAPI\\main.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{55A4A4AE-3769-4074-91B2-9A20D5217894}|BootCampWinAPI\\BootCampWinAPI.vcxproj|solutionrelative:BootCampWinAPI\\main.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Tank.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\Tank.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\MainGame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\MainGame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Tank.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\Tank.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Missile.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\Missile.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Missile.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\Missile.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\deque||{3B902123-F8A7-4915-9F01-361F908088D0}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\config.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\config.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\MainGame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\MainGame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\GameObject.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\GameObject.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\CommonFunction.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\CommonFunction.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{55A4A4AE-3769-4074-91B2-9A20D5217894}|BootCampWinAPI\\BootCampWinAPI.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\BootCampWinAPI\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{55A4A4AE-3769-4074-91B2-9A20D5217894}|BootCampWinAPI\\BootCampWinAPI.vcxproj|solutionrelative:BootCampWinAPI\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\GameObject.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\GameObject.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{063909CB-9683-4DA5-89F8-956A5102FD55}|250306_TankDefense\\250306_TankDefense.vcxproj|solutionrelative:250306_TankDefense\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4B8AC299-9F70-4F3E-8BD9-2869FE8BF8C7}|20250306_WinAPI\\20250306_WinAPI.vcxproj|C:\\Users\\user\\source\\repos\\BootCampWinAPI\\20250306_WinAPI\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{4B8AC299-9F70-4F3E-8BD9-2869FE8BF8C7}|20250306_WinAPI\\20250306_WinAPI.vcxproj|solutionrelative:20250306_WinAPI\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +65,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 159,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 13,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,34 +73,184 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "deque",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\deque",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\deque",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\deque",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\deque",
+              "ViewState": "AgIAADcEAAAAAAAAAAAlwEoEAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-03-07T07:59:05.155Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\20250306_WinAPI\\main.cpp",
+              "RelativeDocumentMoniker": "20250306_WinAPI\\main.cpp",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\20250306_WinAPI\\main.cpp",
+              "RelativeToolTip": "20250306_WinAPI\\main.cpp",
+              "ViewState": "AgIAAPoBAAAAAAAAAAAswA4CAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-03-07T05:19:09.413Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Missile.cpp",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Missile.cpp",
+              "RelativeDocumentMoniker": "250306_TankDefense\\Missile.cpp",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Missile.cpp",
+              "RelativeToolTip": "250306_TankDefense\\Missile.cpp",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAlwEYAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-03-07T05:14:41.274Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Missile.h",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Missile.h",
+              "RelativeDocumentMoniker": "250306_TankDefense\\Missile.h",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Missile.h",
+              "RelativeToolTip": "250306_TankDefense\\Missile.h",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA0AAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-03-07T05:13:56.957Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "GameObject.cpp",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\GameObject.cpp",
+              "RelativeDocumentMoniker": "250306_TankDefense\\GameObject.cpp",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\GameObject.cpp",
+              "RelativeToolTip": "250306_TankDefense\\GameObject.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-03-07T02:50:09.734Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "MainGame.h",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\MainGame.h",
+              "RelativeDocumentMoniker": "250306_TankDefense\\MainGame.h",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\MainGame.h",
+              "RelativeToolTip": "250306_TankDefense\\MainGame.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-03-07T02:35:11.113Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "MainGame.cpp",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\MainGame.cpp",
+              "RelativeDocumentMoniker": "250306_TankDefense\\MainGame.cpp",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\MainGame.cpp",
+              "RelativeToolTip": "250306_TankDefense\\MainGame.cpp",
+              "ViewState": "AgIAADEAAAAAAAAAAAAYwEIAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-03-07T02:35:07.237Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "GameObject.h",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\GameObject.h",
+              "RelativeDocumentMoniker": "250306_TankDefense\\GameObject.h",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\GameObject.h",
+              "RelativeToolTip": "250306_TankDefense\\GameObject.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-03-07T02:27:14.871Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Tank.h",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Tank.h",
+              "RelativeDocumentMoniker": "250306_TankDefense\\Tank.h",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Tank.h",
+              "RelativeToolTip": "250306_TankDefense\\Tank.h",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAACYAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-03-07T02:27:10.961Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "config.h",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\config.h",
+              "RelativeDocumentMoniker": "250306_TankDefense\\config.h",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\config.h",
+              "RelativeToolTip": "250306_TankDefense\\config.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-03-07T02:18:33.832Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "main.cpp",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\main.cpp",
+              "RelativeDocumentMoniker": "250306_TankDefense\\main.cpp",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\main.cpp",
+              "RelativeToolTip": "250306_TankDefense\\main.cpp",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-03-07T02:17:44.655Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CommonFunction.h",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\CommonFunction.h",
+              "RelativeDocumentMoniker": "250306_TankDefense\\CommonFunction.h",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\CommonFunction.h",
+              "RelativeToolTip": "250306_TankDefense\\CommonFunction.h",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAswF4AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-03-07T02:17:20.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Tank.cpp",
+              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Tank.cpp",
+              "RelativeDocumentMoniker": "250306_TankDefense\\Tank.cpp",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\250306_TankDefense\\Tank.cpp",
+              "RelativeToolTip": "250306_TankDefense\\Tank.cpp",
+              "ViewState": "AgIAAKoAAAAAAAAAAAAlwMEAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-03-07T02:15:24.198Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "main.cpp",
               "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\BootCampWinAPI\\main.cpp",
               "RelativeDocumentMoniker": "BootCampWinAPI\\main.cpp",
               "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\BootCampWinAPI\\main.cpp",
               "RelativeToolTip": "BootCampWinAPI\\main.cpp",
-              "ViewState": "AgIAAKMAAAAAAAAAAAAgwLUAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAFoAAAAAAAAAAADgvwUBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-03-06T09:55:50.145Z",
-              "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 159,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "main.h",
-              "DocumentMoniker": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\BootCampWinAPI\\main.h",
-              "RelativeDocumentMoniker": "BootCampWinAPI\\main.h",
-              "ToolTip": "C:\\Users\\user\\source\\repos\\BootCampWinAPI\\BootCampWinAPI\\main.h",
-              "RelativeToolTip": "BootCampWinAPI\\main.h",
-              "ViewState": "AgIAAG8AAAAAAAAAAAAAADAAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-03-06T09:55:50.198Z",
               "EditorCaption": ""
             }
           ]

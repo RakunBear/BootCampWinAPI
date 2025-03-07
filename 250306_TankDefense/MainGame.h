@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
+class Tank;
+
 class MainGame : public GameObject
 {
 private:
@@ -10,7 +12,7 @@ private:
 	int mousePosX = 0, mousePosY = 0;
 	wchar_t szText[128];
 
-	//Tank tank
+	Tank* tank;
 
 public:
 	void Init();	// 멤버 변수으 ㅣ초기화, 메모리 할당
