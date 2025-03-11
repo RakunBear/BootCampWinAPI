@@ -11,6 +11,7 @@ private :
 	float damage;
 	string name;
 	RECT rcCollision;
+	int hp;
 
 	//Æ÷½Å
 	POINT barrelEnd;
@@ -49,6 +50,16 @@ public:
 	void Fire(int skill);
 	void RotateBarrel(float angle);
 	void Dead();
+	void Hit(int damage);
+	
+	bool CheckMissileHit(const RECT& target);
+
+	const float& GetBarrelAngle();
+	const POINT& GetPos();
+	const RECT& GetRect();
+	const int& GetHp();
+
+	int GetRemainTime();
 
 	Tank();
 	~Tank();

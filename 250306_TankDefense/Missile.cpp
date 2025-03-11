@@ -23,6 +23,14 @@ void Missile2::Release()
 void Missile2::Update()
 {
 	CheckOrder();
+
+	if (pos.x < 0 || pos.x > WINSIZE_X || pos.y < 0 || pos.y > WINSIZE_Y)
+	{
+		Dead();
+	}
+
+	if (isDead) return;
+
 	Move();
 
 	if (liveTime-- > 0)
@@ -35,18 +43,15 @@ void Missile2::Render(HDC hdc)
 	if (isDead) return;
 
 	RenderEllipseAtCenter(hdc, pos.x, pos.y, size, size);
+
 }
 
 void Missile2::Move()
 {
-	if (isDead) return;
-
-	if (pos.x < 0 || pos.x > WINSIZE_X || pos.y < 0 || pos.y > WINSIZE_Y)
-		return;
-
 	pos.x += (int)(speed * cosf(angle));
 	pos.y += -(int)(speed * sinf(angle));
 
+	rcCollision = GetRectAtCenter(pos.x, pos.y, size, size);
 }
 
 void Missile2::Dead()
@@ -54,16 +59,23 @@ void Missile2::Dead()
 	isDead = true;
 }
 
-void Missile2::Set(POINT pos, float angle, int delayTime)
+bool Missile2::GetDead()
+{
+	return isDead;
+}
+
+void Missile2::Set(const POINT& pos, float angle, float speed)
 {
 	this->curTime = 0;
 	this->liveTime = 300;
 	this->angle = angle;
+	this->speed = speed;
 	this->pos = pos;
-	orderQueue.push(pair<int, int>{delayTime, 0});
+
+	rcCollision = GetRectAtCenter(pos.x, pos.y, size, size);
 }
 
-POINT Missile2::GetPos()
+const POINT& Missile2::GetPos()
 {
 	return pos;
 }
@@ -73,24 +85,36 @@ float Missile2::GetAngle()
 	return angle;
 }
 
+const RECT& Missile2::GetRect()
+{
+	return rcCollision;
+}
+
+void Missile2::AddOrder(int delayTime, int order)
+{
+	orderQueue.push(pair<int, int>{delayTime, order});
+}
+
+bool Missile2::HitCheck(const RECT& target)
+{
+	if (isDead) return false;
+
+	if (RectInRect(target, rcCollision))
+	{
+		return true;
+	}
+	return false;
+}
+
 void Missile2::CheckOrder()
 {
 	if (orderQueue.size() < 1)
 		return;
-	wstring s = L"SF : " + std::to_wstring(curTime);
-	OutputDebugString(s.c_str());
+	//wstring s = L"SF : " + std::to_wstring(curTime);
+	//OutputDebugString(s.c_str());
 	if (curTime > orderQueue.front().first)
 	{
-		
-		int order = orderQueue.front().second;
-		switch (order)
-		{
-		case 0:
-			Shot();
-			break;
-		default:
-			break;
-		}
+		ExcuteOrder(orderQueue.front().second);
 
 		curTime = 0;
 		orderQueue.pop();
@@ -102,6 +126,18 @@ void Missile2::CheckOrder()
 void Missile2::Shot()
 {
 	isDead = false;
+}
+
+void Missile2::ExcuteOrder(int order)
+{
+	switch (order)
+	{
+	case 0:
+		Shot();
+		break;
+	default:
+		break;
+	}
 }
 
 Missile2::Missile2()

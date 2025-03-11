@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 class Tank;
+class EnumyGroup;
 
 class MainGame : public GameObject
 {
@@ -13,6 +14,7 @@ private:
 	wchar_t szText[128];
 
 	Tank* tank;
+	EnumyGroup* enumyGroup;
 
 public:
 	void Init();	// 멤버 변수으 ㅣ초기화, 메모리 할당

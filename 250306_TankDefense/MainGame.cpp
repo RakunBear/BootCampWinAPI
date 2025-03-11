@@ -1,5 +1,6 @@
 #include "MainGame.h"
 #include "Tank.h"
+#include "EnumyGroup.h"
 
 /*
 	실습1. 미사일 한발 쏘기
@@ -8,10 +9,20 @@
 	실습4. 스킬샷2 (자체 기획)
 */
 
+/* 
+	실습1. 적 클래스 생성 (화면 밖, 랜덤한 위치)
+	실습2. 적은 탱크를 향해 다가온다.
+	실습3. 미사일 - 적, 적 - 탱크 충돌 처리
+	실습4. 5번째 미사일 마다 유도미사일 발사
+			(가장 가까운 적을 따라 가서 맞춘다)
+*/
+
 void MainGame::Init()
 {
 	tank = new Tank();
 	tank->Init();
+	enumyGroup = new EnumyGroup(*tank);
+	enumyGroup->Init();
 }
 
 void MainGame::Release()
@@ -21,18 +32,41 @@ void MainGame::Release()
 		tank->Release();
 		delete tank;
 	}
+
+	if (enumyGroup)
+	{
+		enumyGroup->Release();
+		delete enumyGroup;
+	}
 }
 
 void MainGame::Update()
 {
 	if (tank)
+	{
 		tank->Update();
+	}
+
+	if (enumyGroup)
+	{
+		enumyGroup->Update();
+	}
 }
 
 void MainGame::Render(HDC hdc)
 {
 	if (tank)
 		tank->Render(hdc);
+
+	if (enumyGroup)
+	{
+		enumyGroup->Render(hdc);
+	}
+
+	wsprintf(szText, L"HP : %d", tank->GetHp());
+	TextOut(hdc, 20, 20, szText, wcslen(szText));
+	wsprintf(szText, L"Attack Delay : %d", tank->GetRemainTime());
+	TextOut(hdc, 20, 40, szText, wcslen(szText));
 }
 
 LRESULT MainGame::MainProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)

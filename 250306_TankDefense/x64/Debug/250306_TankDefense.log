@@ -1,4 +1,16 @@
-﻿  Tank.cpp
-C:\Users\user\source\repos\BootCampWinAPI\250306_TankDefense\Tank.cpp(90,22): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\user\source\repos\BootCampWinAPI\250306_TankDefense\Tank.cpp(91,22): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+﻿  Enumy.cpp
+C:\Users\user\source\repos\BootCampWinAPI\250306_TankDefense\Enumy.cpp(85,28): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\BootCampWinAPI\250306_TankDefense\Enumy.cpp(85,23): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\BootCampWinAPI\250306_TankDefense\Enumy.cpp(118,3): warning C4244: 'return': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  EnumyGroup.cpp
+  MainGame.cpp
+C:\Users\user\source\repos\BootCampWinAPI\250306_TankDefense\MainGame.cpp(67,37): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\BootCampWinAPI\250306_TankDefense\MainGame.cpp(69,37): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Missile.cpp
+  MissileLoader.cpp
+  Tank.cpp
+C:\Users\user\source\repos\BootCampWinAPI\250306_TankDefense\Tank.cpp(96,22): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\user\source\repos\BootCampWinAPI\250306_TankDefense\Tank.cpp(97,22): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  VariantMissile.cpp
+  코드를 생성하고 있습니다...
   250306_TankDefense.vcxproj -> C:\Users\user\source\repos\BootCampWinAPI\x64\Debug\250306_TankDefense.exe

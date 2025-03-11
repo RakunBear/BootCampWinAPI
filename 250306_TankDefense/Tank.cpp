@@ -1,6 +1,7 @@
 #include "Tank.h"
 #include "CommonFunction.h"
 #include "Missile.h"
+#include "VariantMissile.h"
 
 void Tank::Init()
 {
@@ -10,6 +11,7 @@ void Tank::Init()
 	damage = 10;
 	name = "Tank";
 	rcCollision = GetRectAtCenter(pos.x, pos.y, size, size);
+	hp = 100;
 
 	// 포신
 	barrelSize = 120;
@@ -18,7 +20,7 @@ void Tank::Init()
 	barrelAngle = DEGTORAD(135);
 
 	// 미사일
-	missileCount = 100;
+	missileCount = 200;
 	missiles = new Missile2*[missileCount];
 	for (int i = 0; i < missileCount; ++i)
 	{
@@ -111,6 +113,7 @@ void Tank::Render(HDC hdc)
 		if (!missiles[i]) continue;
 
 		missiles[i]->Render(hdc);
+
 	}
 }
 
@@ -120,14 +123,10 @@ void Tank::Move()
 
 bool Tank::CheckFire()
 {
-	if (fireTimer > 5)
+	if (!canFire && fireTimer > 5)
 	{
 		canFire = true;
 		fireTimer = 0;
-	}
-	else
-	{
-		canFire = false;
 	}
 
 	return canFire;
@@ -142,20 +141,21 @@ void Tank::Reload()
 
 void Tank::DefaultFire()
 {
-	missiles[curMissileIdx]->Set(pos, barrelAngle, 0);
+	missiles[curMissileIdx]->Set(pos, barrelAngle, 10);
 	curMissileIdx = ++curMissileIdx % missileCount;
 }
 
 void Tank::ThreeFire()
 {
-	missiles[curMissileIdx]->Set(pos, barrelAngle, 0);
+	missiles[curMissileIdx]->Set(pos, barrelAngle, 10);
+	missiles[curMissileIdx]->AddOrder(0, 0);
 	curMissileIdx = ++curMissileIdx % missileCount;
-	missiles[curMissileIdx]->Set(pos, barrelAngle, 3);
+	missiles[curMissileIdx]->Set(pos, barrelAngle, 10);
+	missiles[curMissileIdx]->AddOrder(3, 0);
 	curMissileIdx = ++curMissileIdx % missileCount;
-	missiles[curMissileIdx]->Set(pos, barrelAngle, 6);
+	missiles[curMissileIdx]->Set(pos, barrelAngle, 10);
+	missiles[curMissileIdx]->AddOrder(6, 0);
 	curMissileIdx = ++curMissileIdx % missileCount;
-
-	OutputDebugString(L"ADADA");
 }
 
 void Tank::BoomFire()
@@ -165,7 +165,8 @@ void Tank::BoomFire()
 	missiles[idx]->Dead();
 	for (int i = 0; i < 36; ++i)
 	{
-		missiles[curMissileIdx]->Set(sp, DEGTORAD(10 * i), 0);
+		missiles[curMissileIdx]->Set(sp, DEGTORAD(10 * i), 10);
+		missiles[curMissileIdx]->AddOrder(60, 0);
 		curMissileIdx = ++curMissileIdx % missileCount;
 	}
 }
@@ -177,15 +178,16 @@ void Tank::SplitFire()
 	float ang = missiles[idx]->GetAngle();
 	float halfAng = DEGTORAD(45);
 	missiles[idx]->Dead();
-	missiles[curMissileIdx]->Set(sp, ang - halfAng, 0);
+	missiles[curMissileIdx]->Set(sp, ang - halfAng, 10);
 	curMissileIdx = ++curMissileIdx % missileCount;
-	missiles[curMissileIdx]->Set(sp, ang + halfAng, 0);
+	missiles[curMissileIdx]->Set(sp, ang + halfAng, 10);
 	curMissileIdx = ++curMissileIdx % missileCount;
 }
 
 void Tank::Fire(int skill)
 {
 	if (!CheckFire()) return;
+	canFire = false;
 
 	switch (skill)
 	{
@@ -196,8 +198,9 @@ void Tank::Fire(int skill)
 		orderQueue.push(pair<int, int>{0, 1});
 		break;
 	case 2:
-		orderQueue.push(pair<int, int>{0, 0});
-		orderQueue.push(pair<int, int>{60, 2});
+		//orderQueue.push(pair<int, int>{0, 0});
+		//orderQueue.push(pair<int, int>{60, 2});
+		orderQueue.push(pair<int, int>{0, 2});
 		break;
 	case 3:
 		orderQueue.push(pair<int, int>{0, 0});
@@ -219,6 +222,55 @@ void Tank::RotateBarrel(float angle)
 
 void Tank::Dead()
 {
+}
+
+void Tank::Hit(int damage)
+{
+	hp -= damage;
+}
+
+bool Tank::CheckMissileHit(const RECT& target)
+{
+	wstring w;
+	for (int i = 0; i < missileCount; ++i)
+	{
+		if (!missiles[i] || missiles[i]->GetDead()) continue;
+		//w = L"T : " + to_wstring(target.left) + L" _ M[" + to_wstring(i) + L"] : " + to_wstring(missiles[i]->GetRect().left) + L"\n";
+		//if (i == 5)
+		//	OutputDebugString(w.c_str());
+		if (missiles[i]->HitCheck(target))
+		{
+			missiles[i]->Dead();
+			return true;
+		}
+	}
+
+	return false;
+}
+
+const float& Tank::GetBarrelAngle()
+{
+	return barrelAngle;
+}
+
+const POINT& Tank::GetPos()
+{
+	return pos;
+}
+
+const RECT& Tank::GetRect()
+{
+	return rcCollision;
+}
+
+const int& Tank::GetHp()
+{
+	return hp;
+}
+
+int Tank::GetRemainTime()
+{
+	return max(5 - fireTimer, 0);
 }
 
 Tank::Tank()

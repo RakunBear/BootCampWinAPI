@@ -129,20 +129,28 @@
   <ItemGroup>
     <ClInclude Include="CommonFunction.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="Enumy.h" />
+    <ClInclude Include="EnumyGroup.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Missile.h" />
+    <ClInclude Include="MissileLoader.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Tank.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="VariantMissile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Enumy.cpp" />
+    <ClCompile Include="EnumyGroup.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MainGame.cpp" />
     <ClCompile Include="Missile.cpp" />
+    <ClCompile Include="MissileLoader.cpp" />
     <ClCompile Include="Tank.cpp" />
+    <ClCompile Include="VariantMissile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="250306_TankDefense.rc" />

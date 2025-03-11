@@ -3,6 +3,7 @@
 
 class Missile2 : public GameObject
 {
+public:
 	POINT pos;
 	int size;
 	float damage;
@@ -14,19 +15,26 @@ class Missile2 : public GameObject
 	int liveTime;
 	std::queue<pair<int, int>> orderQueue;
 
-	void CheckOrder();
+	virtual void CheckOrder();
 	void Shot();
 
 public:
-	void Init();	
-	void Release(); 
-	void Update();
-	void Render(HDC hdc); 
+	virtual void Init();	
+	virtual void Release(); 
+	virtual void Update();
+	virtual void Render(HDC hdc); 
 	void Move();
 	void Dead();
-	void Set(POINT pos, float angle, int delayTime);
-	POINT GetPos();
+	bool GetDead();
+	virtual void Set(const POINT& pos, float angle, float speed = 10);
+	const POINT& GetPos();
 	float GetAngle();
+	const RECT& GetRect();
+	void AddOrder(int delayTime, int order);
+	virtual void ExcuteOrder(int order);
+	virtual void Fire();
+
+	bool HitCheck(const RECT& target);
 
 	Missile2();
 	~Missile2();
