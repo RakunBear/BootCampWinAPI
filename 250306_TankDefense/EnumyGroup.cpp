@@ -11,6 +11,8 @@ void EnumyGroup::Init()
 		enumys[i].Init(this->tank.GetPos());
 		enumys[i].SetRandom();
 	}
+
+	nearDistance = 999999;
 }
 
 void EnumyGroup::Release()
@@ -25,13 +27,6 @@ void EnumyGroup::Update()
 		if (enumys[i].GetDead()) continue;
 
 		enumys[i].Update();
-		
-		float nd = enumys[i].GetDistance();
-		if (nearDistance > nd)
-		{
-			nearDistance = nd;
-			nearIdx = i;
-		}
 
 		if (tank.CheckMissileHit(enumys[i].GetRect()))
 		{
@@ -42,7 +37,15 @@ void EnumyGroup::Update()
 			enumys[i].Dead();
 			tank.Hit(enumys[i].GetAtk());
 		}
+
+		float nd = enumys[i].GetDistance();
+		if (nearDistance > nd)
+		{
+			nearDistance = nd;
+			nearIdx = i;
+		}
 	}
+	nearDistance = 888888;
 }
 
 void EnumyGroup::Render(HDC hdc)
@@ -64,9 +67,10 @@ bool EnumyGroup::HitCheck(const RECT& target)
 
 const POINT& EnumyGroup::GetNearEnumyPos()
 {
+
 	return enumys[nearIdx].GetPos();
 }
 
-EnumyGroup::EnumyGroup(Tank& tank) : tank(tank), enumys(nullptr), enumyCount(0), nearIdx(0), nearDistance(0)
+EnumyGroup::EnumyGroup(Tank& tank) : tank(tank), enumys(nullptr), enumyCount(0), nearIdx(0)
 {
 }

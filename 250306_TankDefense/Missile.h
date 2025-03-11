@@ -1,6 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
+class MissileLoader;
+
 class Missile2 : public GameObject
 {
 public:
@@ -15,26 +17,32 @@ public:
 	int liveTime;
 	std::queue<pair<int, int>> orderQueue;
 
-	virtual void CheckOrder();
+	MissileLoader* missileLoader;
+	const POINT* target;
+
+	void CheckOrder();
 	void Shot();
 
 public:
-	virtual void Init();	
-	virtual void Release(); 
-	virtual void Update();
-	virtual void Render(HDC hdc); 
+	void Init();	
+	void Release(); 
+	void Update();
+	void Render(HDC hdc); 
 	void Move();
 	void Dead();
 	bool GetDead();
-	virtual void Set(const POINT& pos, float angle, float speed = 10);
+	void Set(const POINT& pos, float angle, float speed = 10);
+	void TargetSet(const POINT& pos);
 	const POINT& GetPos();
 	float GetAngle();
 	const RECT& GetRect();
 	void AddOrder(int delayTime, int order);
-	virtual void ExcuteOrder(int order);
-	virtual void Fire();
+	void ExcuteOrder(int order);
+	void SetMissileLoader(MissileLoader* loader);
+	void Chase();
 
 	bool HitCheck(const RECT& target);
+	bool HasTarget();
 
 	Missile2();
 	~Missile2();

@@ -2,6 +2,8 @@
 #include "GameObject.h"
 
 class Missile2;
+class MissileLoader;
+class EnumyGroup;
 
 class Tank : public GameObject
 {
@@ -20,24 +22,16 @@ private :
 						 // 라디안 : (radian)  0f ~ 3.14f ~ 6.28
 
 	// 미사일
-	Missile2** missiles;
-	int missileCount;
-	int curMissileIdx;
-	pair<float, float> dirMissile;
+	MissileLoader* missileLoader;
 	bool canFire;
 	int fireTimer;
 	std::queue<pair<int, int>>orderQueue;
 	int curTime;
 
-	pair<int, int> s1, s2, s3, s4;
+	EnumyGroup* enumyGroup;
 
-	void CheckOrder();
 	bool CheckFire();
 	void Reload();
-	void DefaultFire();
-	void ThreeFire();
-	void BoomFire();
-	void SplitFire();
 
 public:
 
@@ -60,6 +54,7 @@ public:
 	const int& GetHp();
 
 	int GetRemainTime();
+	void SetEnumyGroup(EnumyGroup* eg);
 
 	Tank();
 	~Tank();

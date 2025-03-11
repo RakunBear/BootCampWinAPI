@@ -23,6 +23,7 @@ void MainGame::Init()
 	tank->Init();
 	enumyGroup = new EnumyGroup(*tank);
 	enumyGroup->Init();
+	tank->SetEnumyGroup(enumyGroup);
 }
 
 void MainGame::Release()

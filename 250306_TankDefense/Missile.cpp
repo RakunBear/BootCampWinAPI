@@ -1,5 +1,6 @@
 #include "Missile.h"
 #include "CommonFunction.h"
+#include "MissileLoader.h"
 
 void Missile2::Init()
 {
@@ -8,12 +9,14 @@ void Missile2::Init()
 	size = 50;
 	damage = 10;
 	rcCollision = GetRectAtCenter(pos.x, pos.y, size, size);
+	missileLoader = nullptr;
 	
 	angle = 0;
 	speed = 10.0f;
 	isDead = true;
 	curTime = 0;
 	liveTime = 0;
+	this->target = nullptr;
 }
 
 void Missile2::Release()
@@ -31,7 +34,15 @@ void Missile2::Update()
 
 	if (isDead) return;
 
-	Move();
+	if (HasTarget())
+	{
+		Chase();
+
+	}
+	else
+	{
+		Move();
+	}
 
 	if (liveTime-- > 0)
 		return;
@@ -57,6 +68,7 @@ void Missile2::Move()
 void Missile2::Dead()
 {
 	isDead = true;
+	this->target = nullptr;
 }
 
 bool Missile2::GetDead()
@@ -73,6 +85,11 @@ void Missile2::Set(const POINT& pos, float angle, float speed)
 	this->pos = pos;
 
 	rcCollision = GetRectAtCenter(pos.x, pos.y, size, size);
+}
+
+void Missile2::TargetSet(const POINT& pos)
+{
+	this->target = &pos;
 }
 
 const POINT& Missile2::GetPos()
@@ -106,6 +123,16 @@ bool Missile2::HitCheck(const RECT& target)
 	return false;
 }
 
+bool Missile2::HasTarget()
+{
+	if (target != nullptr)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void Missile2::CheckOrder()
 {
 	if (orderQueue.size() < 1)
@@ -114,6 +141,7 @@ void Missile2::CheckOrder()
 	//OutputDebugString(s.c_str());
 	if (curTime > orderQueue.front().first)
 	{
+
 		ExcuteOrder(orderQueue.front().second);
 
 		curTime = 0;
@@ -135,9 +163,34 @@ void Missile2::ExcuteOrder(int order)
 	case 0:
 		Shot();
 		break;
+	case 1:
+		if (missileLoader != nullptr)
+		{
+			missileLoader->Boom(pos);
+			Dead();
+		}
+		break;
 	default:
 		break;
 	}
+}
+
+void Missile2::SetMissileLoader(MissileLoader* loader)
+{
+	missileLoader = loader;
+	OutputDebugString(L")))");
+}
+
+void Missile2::Chase()
+{
+	int dx = target->x - pos.x;
+	int dy = target->y - pos.y;
+	float ag = atan2f(dy, dx);
+
+	pos.x += (int)(speed * cosf(ag));
+	pos.y += (int)(speed * sinf(ag));
+
+	rcCollision = GetRectAtCenter(pos.x, pos.y, size, size);
 }
 
 Missile2::Missile2()
